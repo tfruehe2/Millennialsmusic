@@ -1,0 +1,46 @@
+<div class="modal fade" id="playlistModal" tabindex="-1" role="dialog" aria-labelledby="playlistModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        {% if user.playlist_set %}
+
+        <div class='row'>
+          <div class='col-sm-10'>
+            <h4 class="modal-title" id="">
+            <div class="btn-group" id="playlistModalBtnGroup">
+              <a class='btn btn-default borderless active' id="createPlaylist">Create Playlist</a>
+              <a class='btn btn-default borderless' id="addToPlaylist">Add To Existing Playlist</a>
+            </div>
+            </h4>
+        {% else %}
+            <h4 class="modal-title" id="">Create Playlist</h4>
+        {% endif %}
+          </div>
+          <div class='col-sm-1 col-sm-offset-1'>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModal"><span aria-hidden="true">&times;</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="modalForm">
+          <form id="playlistForm" method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in playlist_form %}
+            <div class="form-group">
+              {{ field.errors }}
+              {{ field.label_tag }} {{ field }}
+            </div>
+            {% endfor %}
+          </form>
+        </div>
+      </div>
+      <div id="playlistList"></div>
+      <div class="modal-footer">
+        &emsp;&ensp;<strong class="pull-left" id="songName"></strong>
+        <button type="submit" form="playlistForm" class="btn btn-success" id="createPlaylistBtn">Create Playlist</button>
+        <button class="btn btn-success" id="addToPlaylistBtn" type="button" style="display: none;">Add To Playlist</button>
+      </div>
+    </div>
+
+  </div>
+</div>

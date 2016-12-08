@@ -1,0 +1,163 @@
+{% load staticfiles %}
+<div class="col-sm-12">
+{% for post in post_list %}
+  {% include "snippets/post_cells.html" %}
+{% endfor %}
+</div>
+
+{% include "snippets/hacky_pagination.html" %}
+
+
+<script src="{% static 'blog/js/music_cell_buttons.js' %}"></script>
+<script>
+
+$(".fb-share").click(function() {
+  FB.ui({
+    app_id:'1860937290802014',
+    redirect_url:"http://millennialsmusic.com",
+    method: 'feed',
+    display: 'popup',
+    link: $(this).attr('data-url'),
+  }, function(response){
+    if (response && !response.error_message) {
+      alert('The post was shared on your timeline!');
+    } else {
+      alert('Sorry, there was an error while sharing the post!');
+    }
+});
+});
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    var cookie = document.cookie.split(';');
+    for(var i=0; i < cookie.length; i++) {
+      var cookie = $.trim(cookie[i]);
+      if( cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+
+    }
+  }
+  return cookieValue
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    }
+  }
+});
+</script>
+
+<script>
+
+
+
+
+$(".signin-prompt").popover({
+  trigger: "focus",
+  html: true
+})
+
+</script>
+
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+$("button.twitter-button").hover(function(e){
+  e.preventDefault();
+  $(this)
+      .find('img')
+      .prop("src", "{% static "blog/icons/Twitter_Logo_Blue.png" %}");
+},
+function(e){
+  e.preventDefault();
+  $(this)
+      .find('img')
+      .prop("src", "{% static "blog/icons/Twitter_Logo_grey.png" %}");
+});
+
+
+$( "button.like-button" ).click(function(e) {
+  e.preventDefault();
+  var $this = $(this);
+  $('i', this).toggleClass("fa-heart-o fa-heart");
+
+  $.ajax({
+    url: "{% url "blog:add_like" %}",
+    type: 'POST',
+    data: {'post_id': $this.attr('data-id')},
+    success: function(json) {
+      if ($this.has('span')) {
+        $this.find('strong').text("  "+json.num_likes)
+      }
+    },
+    error: function(error) {
+      console.log("failed to like post");
+    },
+  });
+});
+
+
+</script>
+<script>
+$('.lyrics-button').click(function(e){
+  e.preventDefault();
+  var $this = $(this)
+    $this
+      .closest('div.col-sm-4')
+      .find('.panel-body')
+      .hide()
+      .next('.text-scroller')
+      .removeClass('hidden');
+    $this.remove()
+});
+</script>
+{% if user.is_authenticated %}
+<script>
+$('.playlist-button').click(function(e){
+  e.preventDefault();
+  var name = $(this).attr('data-song-name');
+  var songID = $(this).attr('data-song-id');
+  var urlString = '/create_playlist/'+songID+'/'
+  console.log(urlString)
+  $('#playlistForm, #playlistModal').attr('action', urlString)
+
+  $('#songName', "#playlistModal")
+      .text("Song to be added: "+name);
+  $('#playlistModal')
+      .attr('data-song-id', songID)
+      .modal('show');
+
+});
+
+$('#playlistImage').change(function(){
+  var re = new RegExp("^(image/.{3,4})$")
+  var file = this.files[0]
+  if (!re.test(file.type)) {
+    alert('Sorry, the file you added was not an image!');
+    $(this).val("");
+  }
+  else if (file.size >= 2000000) {
+    alert('Sorry, your image file is too big!\n2Mbs is the cutoff')
+    $(this).val('');
+  }
+});
+
+
+
+
+
+</script>
+{% endif %}
