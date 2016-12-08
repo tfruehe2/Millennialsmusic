@@ -87,7 +87,9 @@ class PlaylistForm(ModelForm):
             'description': forms.Textarea(
                 attrs={'class':'form-control', "rows":'4', 'placeholder':"my favorite [insert genre] songs..."}
             ),
-            'image': forms.FileInput(),
+            'image': forms.FileInput(
+                attrs={'id':"playlistImage"}
+            ),
         }
 
         labels = {

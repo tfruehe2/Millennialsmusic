@@ -34,11 +34,11 @@
                   <button class="btn btn-default like-button heart-button" data-id="{{ post.id }}">
                     <span>
                     {% if user in post.liked_by.all %}
-                    <i class="fa fa-heart fa-lg"></i>
+                    <i class="fa fa-heart fa-2x"></i>
                     {% else %}
-                    <i class="fa fa-heart-o fa-lg"></i>
-                    {% endif %}
-                    <strong>  {{ post.num_likes }}</strong></span>
+                    <i class="fa fa-heart-o fa-2x"></i>
+                    {% endif %}&nbsp;
+                    <strong style="font-size:1.25em;">  {{ post.num_likes }}</strong></span>
                   </button>
                 {% else %}
                 <a tabindex="0" class="btn btn-default heart-button signin-prompt sharp" data-container="body"
@@ -53,7 +53,7 @@
 
                 {% endif %}
             </div>
-               <strong class="col-sm-4 text-center">Views: {{ post.views }}</strong>
+               <strong class="col-sm-4 text-center" style="font-size:1.25em;">Views: {{ post.views }}</strong>
             <div class="col-sm-4">
               <div class="btn-group pull-right">
                 <button class="btn btn-default yt-button">

@@ -96,6 +96,9 @@ class Song(models.Model):
     lyrics = models.TextField(blank=True)
     image = models.ImageField(upload_to="song_images/", blank=True)
 
+    class Meta:
+        unique_together = ('artist', 'song_name',)
+
     def _get_full_name(self):
         if self.feat_artist:
             return '{} - {} (Ft. {})'.format(self.artist, self.song_name, self.feat_artist)
@@ -147,6 +150,9 @@ class Playlist(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.OneToOneField(Post, on_delete=models.CASCADE, blank=True)
     is_private = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('name', 'created_by',)
 
     def create_song_list(self):
         names = ""

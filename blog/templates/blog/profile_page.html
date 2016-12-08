@@ -43,7 +43,7 @@
     <h2 id="myPlaylists" class="text-center">My Playlists</h2>
     {% for playlist in profile.playlist_set.all %}
     <div class="myPlaylists">
-      {% include 'snippets/playlist_cell.html' %}
+      {% include 'snippets/post_cells.html' with post=playlist.post %}
     </div>
     {% endfor %}
 {% endif %}
