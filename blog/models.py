@@ -77,7 +77,10 @@ class Post(models.Model):
         self.save()
 
     def get_absolute_url(self):
-        return 'http://www.millennialsmusic.com/{}blog/{}'.format(self.feed.slug, self.id)
+        if self.is_playlist:
+            return 'http://www.millennialsmusic.com/playlist/{}'.format(self.id)
+        else:
+            return 'http://www.millennialsmusic.com/{}blog/{}'.format(self.feed.slug, self.id)
 
 
     def quote_url(self):
